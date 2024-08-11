@@ -1,388 +1,278 @@
-#include<stdio.h>
-#include<conio.h>
-#include<graphics.h>
-#include<math.h>
-#include<dos.h>
-void graphics();
-void text();
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-	void main()
-	{
-	clrscr();
-	graphics();
-	text();
-	}
-		void graphics()
-		{
-		intgd=DETECT, gm;
-		initgraph(&gd, &gm, "C:\\TURBOC3\\BGI");
-		setbkcolor(BLUE);
-		setcolor(8);
-		rectangle(0,0,160,423);//choice list
-		setfillstyle(SOLID_FILL,WHITE);
-		floodfill(2,2,8);
-		outtextxy(10,20,"Choice");
-		outtextxy(10,30,"1.  ADDITION");
-		outtextxy(10,50,"2.  SUBSTRUCTION");
-		outtextxy(10,70,"3.  MULTIPLICATION");
-		outtextxy(10,90,"4.  DIVISION");
-		outtextxy(10,110,"5.  SQUARE ROOT");
-		outtextxy(10,130,"6.  POWER");
-		outtextxy(10,150,"7.  SQUARE");
-		outtextxy(10,170,"8.  CUBE");
-		outtextxy(10,190,"9.  1/X");
-		outtextxy(10,210,"10. EXPONENT");
-	   /*	outtextxy(10,230,"11. X^1/Y");      */
-	      /*	outtextxy(10,250,"12. ");  */
-		outtextxy(10,230,"11. FACTORIAL");
-		outtextxy(10,250,"12. PERCENTAGE");
-		outtextxy(10,270,"13. LOG");
-		outtextxy(10,290,"14. REMAINDER");
-		outtextxy(10,310,"15. SIN(x)");
-		outtextxy(10,330,"16. COS(x)");
-		outtextxy(10,350,"17. TAN(x)");
-		outtextxy(10,370,"18. COSEC(x)");
-		outtextxy(10,390,"19. SEC(x)");
-		outtextxy(10,410,"20. COT(x)");
-	       // choice line
-		line(0,43,160,43);
-		line(0,63,160,63);
-		line(0,83,160,83);
-		line(0,103,160,103);
-		line(0,123,160,123);
-		line(0,143,160,143);
-		line(0,163,160,163);
-		line(0,183,160,183);
-		line(0,103,160,103);
-		line(0,123,160,123);
-		line(0,143,160,143);
-		line(0,143,160,143);
-		line(0,163,160,163);
-		line(0,183,160,183);
-		line(0,203,160,203);
-		line(0,223,160,223);
-		line(0,243,160,243);
-		line(0,263,160,263);
-		line(0,283,160,283);
-		line(0,303,160,303);
-		line(0,323,160,323);
-		line(0,343,160,343);
-		line(0,363,160,363);
-		line(0,383,160,383);
-		line(0,403,160,403);
-		line(0,423,160,423);
-	    //	line(0,443,160,443);
-	      //	line(0,463,160,463);
-		setcolor(6);
-		bar3d(230,120,620,200,2,2); //Display Screen
-		//1 colums
-		setcolor(3);
-		setfillstyle(SOLID_FILL,YELLOW);
-		bar3d(230,240,270,270,2,2);
-		bar3d(230,290,270,320,2,2);
-		bar3d(230,340,270,370,2,2);
-		bar3d(230,390,270,420,2,2);
+// structure
+struct LoginCredentials {
+    char username[50];
+    char password[50];
+};
 
-		//2 colums
-		bar3d(280,240,320,270,2,2);
-		bar3d(280,290,320,320,2,2);
-		bar3d(280,340,320,370,2,2);
-		bar3d(280,390,320,420,2,2);
+struct Student {
+  char name[50];
+  int age;
+  char major[50];
+  float percentage;
+  int attendance;
+};
 
-		//3 colums
-		bar3d(330,240,370,270,2,2);
-		bar3d(330,290,370,320,2,2);
-		bar3d(330,340,370,370,2,2);
-		bar3d(330,390,370,420,2,2);
+// functions declaration
+void calculatePERC(struct Student *student);
+float percentage(float total, float fM);
+void inputAttendance(struct Student *student);
+void executeUserLogin();
 
-		//4 colums
-		bar3d(380,240,420,270,2,2);
-		bar3d(380,290,420,320,2,2);
-		bar3d(380,340,420,370,2,2);
-		bar3d(380,390,420,420,2,2);
+// main function
+int main() {
+  executeUserLogin();
+  
+  struct Student students[100];
+  FILE *fptr;
+  int choice, num_students = 0, num_saved_stds = 1;
 
-		//5 colums
-		bar3d(430,240,470,270,2,2);
-		bar3d(430,290,470,320,2,2);
-		bar3d(430,340,470,370,2,2);
-		bar3d(430,390,470,420,2,2);
-		//6 colums
-		bar3d(480,240,520,270,2,2);
-		bar3d(480,290,520,320,2,2);
-		bar3d(480,340,520,370,2,2);
-		bar3d(480,390,520,420,2,2);
+  do {
+    printf("------------------------------------------------");
+    printf("\n*********************Menu***********************\n");
+    printf("------------------------------------------------\n");
+    printf("1. Add Student\n");
+    printf("2. Calculate Percentage\n");
+    printf("3. Input Attendance\n");
+    printf("4. View Recent Students\n");
+    printf("5. View Saved Students\n");
+    printf("6. Save Recent Info\n");
+    printf("7. Exit\n");
+    printf("------------------------------------------------\n");
+    printf("Enter your choice: ");
+    scanf("%d", &choice);
+    getchar();
+    system("clear");
+    switch (choice) {
+    case 1:
+      printf("\n------------------------------------------------");
+      printf("\n****************Student Form********************\n");
+      printf("------------------------------------------------\n");
+      printf("Enter name: ");
+      fgets(students[num_students].name, 50, stdin);
+      printf("Enter age: ");
+      scanf("%d", &students[num_students].age);
+      getchar(); // Consume the newline character left by scanf
+      printf("Enter major: ");
+      fgets(students[num_students].major, 50, stdin);
+      // getchar();
+      students[num_students].percentage = 0;
+      students[num_students].attendance = 0;
+      num_students++;
+      system("clear");
+      printf("\nStudent Added Successfully!!\n");
+      printf("\n");
+      break;
 
-		//7 colums
-		bar3d(530,240,570,270,2,2);
-		bar3d(530,290,570,320,2,2);
-		bar3d(530,340,570,370,2,2);
-		bar3d(530,390,570,420,2,2);
+    case 2:
 
-		//8 colums
-		bar3d(580,240,620,270,2,2);
-		bar3d(580,290,620,320,2,2);
-		bar3d(580,340,620,370,2,2);
-		bar3d(580,390,620,420,2,2);
+      if (num_students > 0) {
+        int student_index;
+        printf("\n------------------------------------------------\n");
+        printf("Enter student index (0 to %d): ", num_students - 1);
+        scanf("%d", &student_index);
+        if (student_index >= 0 && student_index < num_students) {
+          calculatePERC(&students[student_index]);
+          system("clear");
+          printf("\nPercentage calculated for %s\n",
+                 students[student_index].name);
+        } else {
+          system("clear");
+          printf("\n⚠ Invalid student index\n");
+        }
+      } else {
+        system("clear");
+        printf("\n⚠No students to calculate Percentage\n");
+      }
+      printf("\n");
+      break;
+    case 3:
+      if (num_students > 0) {
+        int student_index;
+        printf("\n------------------------------------------------\n");
+        printf("Enter student index (0 to %d): ", num_students - 1);
+        scanf("%d", &student_index);
+        if (student_index >= 0 && student_index < num_students) {
+          inputAttendance(&students[student_index]);
+          system("clear");
+          printf("Attendance recorded for %s!!!\n",
+                 students[student_index].name);
+        } else {
+          system("clear");
+          printf("\n⚠Invalid student index\n");
+        }
+      } else {
+        system("clear");
+        printf("\n⚠No students to record attendance\n");
+      }
+      printf("\n");
+      break;
 
-		setcolor(0);
-		outtextxy(248,252, "1");
-		outtextxy(300,252, "2");
-		outtextxy(348,252, "3");
-		outtextxy(248,302, "4");
-		outtextxy(300,302, "5");
-		outtextxy(348,302, "6");
-		outtextxy(248,352, "7");
-		outtextxy(300,352, "8");
-		outtextxy(348,352, "9");
+    case 4:
+      if (num_students > 0) {
+        printf("\nRecently added Students:\n");
+        for (int i = 0; i < num_students; i++) {
+          printf("-----------------------\n");
+          printf("Name: %s", students[i].name);
+          printf("Age: %d\n", students[i].age);
+          printf("Major: %s", students[i].major);
+          printf("Percentage: %.2f%\n", students[i].percentage);
+          printf("Attendance: %d/30\n", students[i].attendance);
+          printf("-----------------------\n");
+          printf("You should save it permanently!!\n");
+        }
+      } else {
+        printf("\n⚠No students to display\n");
+      }
+      break;
 
-		outtextxy(240,402, "EXP");
-		outtextxy(300,402, "0");
-		outtextxy(348,402, ".");
+    case 5:
+      if (num_saved_stds > 0) {
+        fptr = fopen("stdsData.txt", "r");
+        char ch;
+        ch = fgetc(fptr);
 
-		outtextxy(400,252, "+");
-		outtextxy(440,252, "sin");
-		outtextxy(492,252, "cos");
-		outtextxy(540,252, "tan");
-		outtextxy(594,252, "AC");
+        while (ch != EOF) {
+          printf("%c", ch);
+          ch = fgetc(fptr);
+        }
+        fclose(fptr);
+      } else {
+        printf("\n⚠No students to display\n");
+      }
+      break;
 
-		outtextxy(400,302, "-");
-		outtextxy(440,302, "sec");
-		outtextxy(482,302, "cosec");
-		outtextxy(540,302, "cot");
-		outtextxy(590,302, "LOG");
+    case 6:
+      if (num_students > 0) {
+        fptr = fopen("stdsData.txt", "a");
+        for (int i = 0; i < num_students; i++) {
+          fprintf(fptr, "-----------------------\n");
+          fprintf(fptr, "Name: %s", students[i].name);
+          fprintf(fptr, "Age: %d\n", students[i].age);
+          fprintf(fptr, "Major: %s", students[i].major);
+          fprintf(fptr, "Percentage: %.2f%\n", students[i].percentage);
+          fprintf(fptr, "Attendance: %d/30\n", students[i].attendance);
+          fprintf(fptr, "-----------------------\n");
+          num_saved_stds++;
+        }
+        fclose(fptr);
+        printf("\nData Successfully saved \n");
+      } else {
+        printf("\n⚠No students to save!!\n");
+      }
+      break;
+    case 7:
+      system("clear");
+      printf("\nExiting program......\n");
+      break;
+    default:
+      printf("\n⚠Invalid choice, please try again\n");
+    }
+  } while (choice != 7);
+  printf("\n");
+  return 0;
+}
 
-		outtextxy(390,352, "1/X");
-		outtextxy(446,352, "X");
-		outtextxy(490,352, "10");
-		outtextxy(545,352, "X");
-		line(595,348,614,348);
-		line(590,360,595,348);
-		line(590,360,590,353);
+// Functions defination
+void executeUserLogin() {
+    int option1;
 
-		outtextxy(400,400, "/");
-		outtextxy(448,400, "X");
-		outtextxy(497,400, "*");
-		outtextxy(540,400, "rem");
-		outtextxy(600,400, "X!");
+    while(1) {
+        printf("SIGN UP (1) or LOGIN (2)?\n");
+        scanf("%d", &option1);
 
-		settextstyle(0,0,1);
-		outtextxy(457,395,"3");
-		outtextxy(455,347,"n");
-		outtextxy(506,347,"n");
-		outtextxy(553,347,"2");
+        if (option1 == 1) {
+            ///////////////////SIGN UP//////////////////////
+            struct LoginCredentials user;
+            FILE *file = fopen("login.txt", "r");
 
-		       }
+            if (file == NULL) {
+                file = fopen("login.txt", "w");
+                printf("Enter a username: ");
+                scanf("%s", user.username);
+                printf("Enter a password: ");
+                scanf("%s", user.password);
+
+                fprintf(file, "%s\t%s", user.username, user.password);
+                printf("Sign up successful!\n");
+                fclose(file);
+              break;
+            } else {
+                printf("YOU HAVE ALREADY SIGNED UP!!! \n");
+                fclose(file);
+            }
+            /////////////////opt1 end
+
+        } else if (option1 == 2) {
+            //////////////////////////LOGIN///////////////////////
+            char userInputUsername[50];
+            char userInputPassword[50];
+
+            printf("Enter your username: ");
+            scanf("%s", userInputUsername);
+            printf("Enter your password: ");
+            scanf("%s", userInputPassword);
+
+            FILE *fptr;
+            fptr = fopen("login.txt", "r");
+            if (fptr != NULL) {
+                char username[50];
+                char password[50];
+                fscanf(fptr, "%s\t%s", username, password);
+
+                if (strcmp(userInputUsername, username) == 0 && strcmp(userInputPassword, password) == 0) {
+                    printf("LOGIN SUCCESSFUL!\n");
+                    fclose(fptr);
+                  break;
+                    
+                } else {
+                    printf("Invalid username or password!\n");
+                    fclose(fptr);
+                }
+            } else {
+                printf("Error opening file\n");
+            }
+            ////////////////////////LOGIN END//////////////////////
+        } else {
+            continue; // exit while loop if neither 1 nor 2 is entered
+        }
+    }
+}
 
 
-		void text()
-		{
-	int choice, i, a, b,c;
-	float x, y, result;
-	gotoxy(10,2);
-	scanf("%d", &choice);
-      //	if(choice == 0) exit(0);
-	switch(choice)
-	 {
-	case 1:
-	gotoxy(30,9);
-	printf("Enter X: ");
-	scanf("%f", &x);
-	gotoxy(30,10);
-	printf("Enter Y: ");
-	scanf("%f", &y);
-	result = x + y;
-	gotoxy(70,12);
-	printf("%.1f",result);
-	break;
-	case 2:
-	gotoxy(30,9);
-	printf("Enter X: ");
-	scanf("%f", &x);
-	gotoxy(30,10);
-	printf("Enter Y: ");
-	scanf("%f", &y);
-	result = x - y;
-	gotoxy(70,12);
-	printf("%.1f" ,result);
-	break;
-	case 3:
-	gotoxy(30,9);
-	printf("Enter X: ");
-	scanf("%f", &x);
-	gotoxy(30,10);
-	printf("Enter Y: ");
-	scanf("%f", &y);
-	result = x * y;
-	gotoxy(70,12);
-	printf("%.1f",result);
-	break;
-	case 4:
-	gotoxy(30,9);
-	printf("Enter X: ");
-	scanf("%f", &x);
-	gotoxy(30,10);
-	printf("Enter Y: ");
-	scanf("%f", &y);
-	result = x / y;
-	gotoxy(70,12);
-	printf("%.1f", result);
-	break;
-	case 5:
-	gotoxy(30,9);
-	printf("Enter X: ");
-	scanf("%f", &x);
-	result = sqrt(x);
-	gotoxy(70,12);
-	printf("%.1f", result);
-	break;
-	case 6:
-	gotoxy(30,9);
-	printf("Enter X: ");
-	scanf("%f", &x);
-	gotoxy(30,10);
-	printf("Enter Y: ");
-	scanf("%f", &y);
-	result = pow(x,y);
-	gotoxy(70,12);
-	printf("%.1f" ,result);
-	break;
-	case 7:
-	gotoxy(30,9);
-	printf("Enter X: ");
-	scanf("%f", &x);
-	result = pow(x,2);
-	gotoxy(70,10);
-	printf("%.1f",result);
-	break;
-	case 8:
-	gotoxy(30,9);
-	printf("Enter X: ");
-	scanf("%f", &x);
-	result = pow(x,3);
-	gotoxy(70,12);
-	printf("%.1f",result);
-	break;
-	case 9:
-	gotoxy(18,5);
-	printf("Enter X: ");
-	scanf("%f", &x);
-	result = pow(x,-1);
-	gotoxy(70,12);
-	printf("%.2f",result);
-	break;
-	case 10:
-	gotoxy(70,9);
-	printf("Enter X: ");
-	scanf("%f", &x);
-	result = exp(x);
-	gotoxy(70,12);
-	printf("%.1f",result);
-	break;
-    /*	case 11:
-	gotoxy(30,9);
-	printf("Enter X: ");
-	scanf("%f", &x);
-	result = pow(x, (1/y));
-	gotoxy(70,12);
-	printf("%.1f",result);
-	break;
-	case 12:
-	gotoxy(30,9);
-	printf("Enter X: ");
-	scanf("%f", &x);
-	result = pow(10,x);
-	gotoxy(70,12);
-	printf("%.1f",result);
-	break;     */
-	case 11:
-	gotoxy(30,9);
-	printf("Enter X: ");
-	scanf("%f", &x);
-	result = 1;
-	for(i = 1; i<= x; i++) {
-	result = result * i;
-	}
-	gotoxy(70,12);
-	printf("%.1f",result);
-	break;
-	case 12:
-	gotoxy(30,9);
-	printf("Enter X: ");
-	scanf("%f", &x);
-	gotoxy(30,10);
-	printf("Enter Y: ");
-	scanf("%f", &y);
-	result = (x * y) / 100;
-	gotoxy(70,12);
-	printf("%.1f",result);
-	break;
-	case 13:
-	gotoxy(30,9);
-	printf("Enter X: ");
-	scanf("%f", &x);
-	gotoxy(70,12);
-	result = log(x);
-	printf("%.1f",result);
-	break;
-	case 14:
-	gotoxy(30,9);
-	printf("Enter X: ");
-	scanf("%f", &x);
-	gotoxy(30,10);
-	printf("Enter Y: ");
-	scanf("%f", &y);
-	result = a%b;
-	gotoxy(70,12);
-	printf("%.2f",result);
-	break;
-	case 15:
-	gotoxy(30,9);
-	printf("Enter X: ");
-	scanf("%f", &x);
-	result = sin(x * 3.14159 / 180.00);
-	gotoxy(70,12);
-	printf("%.2f",result);
-	break;
-	case 16:
-	gotoxy(30,9);
-	printf("Enter X: ");
-	scanf("%f", &x);
-	result = cos(x * 3.14159 / 180);
-	gotoxy(70,12);
-	printf("%.2f",result);
-	break;
-	case 17:
-	gotoxy(30,9);
-	printf("Enter X: ");
-	scanf("%f", &x);
-	result = tan(x * 3.14159 / 180);
-	gotoxy(70,12);
-	printf("%.2f",result);
-	break;
-	case 18:
-	gotoxy(30,9);
-	printf("Enter X: ");
-	scanf("%f", &x);
-	result = 1/sin(x * 3.14159 / 180);
-	gotoxy(70,12);
-	printf("%.2f",result);
-	break;
-	case 19:
-	gotoxy(30,9);
-	printf("Enter X: ");
-	scanf("%f", &x);
-	result = 1/cos(x * 3.14159 / 180);
-	gotoxy(70,12);
-	printf("%.2f",result);
-	break;
-	case 20:
-	gotoxy(30,9);
-	printf("Enter X: ");
-	scanf("%f", &x);
-	result = 1/tan(x * 3.14159 / 180);
-	gotoxy(70,12);
-	printf("%.2f",result);
-	break;
-	}
-	getch();
-	}
+void calculatePERC(struct Student *student) {
+
+  float phy, che, mat, nep, eng, comp, fM, percent;
+
+  printf("\nEnter full marks : ");
+  scanf("%f", &fM);
+  printf("\nEnter physics marks : ");
+  scanf("%f", &phy);
+  printf("\nEnter chemistry marks : ");
+  scanf("%f", &che);
+  printf("\nEnter math marks : ");
+  scanf("%f", &mat);
+  printf("\nEnter nepali marks : ");
+  scanf("%f", &nep);
+  printf("\nEnter english marks : ");
+  scanf("%f", &eng);
+  printf("\nEnter computer marks : ");
+  scanf("%f", &comp);
+  float total = phy + che + mat + nep + eng + comp;
+
+  percent = percentage(total, fM);
+
+  student->percentage = percent;
+}
+
+void inputAttendance(struct Student *student) {
+  int att;
+  printf("\nEnter this month attendence:");
+  scanf("%d", &att);
+  student->attendance = att;
+}
+
+float percentage(float total, float fM) { return (total / (fM * 6)) * 100; }
